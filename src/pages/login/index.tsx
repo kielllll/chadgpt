@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React, { FormEventHandler, useState } from "react";
 import { Layout } from "~/components";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 import { signIn } from "next-auth/react";
 
@@ -20,7 +21,13 @@ const Login: NextPage = () => {
       redirect: false,
     });
 
-    console.log({ res });
+    if (res?.status === 200) {
+      router.push("/");
+    }
+
+    if (res?.error) {
+      toast.error(res.error);
+    }
   };
 
   return (
