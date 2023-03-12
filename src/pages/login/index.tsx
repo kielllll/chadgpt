@@ -1,29 +1,26 @@
 import { type NextPage } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { FormEventHandler, useState } from "react";
 import { Layout } from "~/components";
 import Image from "next/image";
+
+import { signIn } from "next-auth/react";
 
 const Login: NextPage = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (event: React.SyntheticEvent) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    // Add logic here to authenticate user with email and password
-    // Example:
-    // const res = await fetch('/api/login', {
-    //   method: 'POST',
-    //   body: JSON.stringify({ email, password })
-    // });
-    // if (res.ok) {
-    //   router.push('/dashboard');
-    // } else {
-    //   setError('Invalid email or password');
-    // }
-    router.push("/");
+
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    console.log({ res });
   };
 
   return (
