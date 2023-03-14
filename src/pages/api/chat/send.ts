@@ -4,24 +4,26 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const OpenAI = require("openai-api");
-  const OPENAI_API_KEY = process.env.SERVER_OPENAI_API_KEY;
-  const openai = new OpenAI(OPENAI_API_KEY);
-
-  const gptResponse = await openai.complete({
-    engine: "davinci",
-    prompt: "Hello",
-    temperature: 0.9,
-    topP: 1,
-    presencePenalty: 0,
-    frequencyPenalty: 0,
-    bestOf: 1,
-    n: 1,
-    stream: false,
-    stop: ["\n", "testing"],
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.SERVER_OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: req.body.message }],
+      temperature: 0.7,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      max_tokens: 200,
+      stream: false,
+      n: 1,
+    }),
   });
 
-  console.log(gptResponse.data);
+  const json = await response.json();
 
-  res.status(200).json({ response: "Hello World" });
+  res.status(200).json({ response: json.choices[0].message.content });
 }

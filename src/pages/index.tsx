@@ -21,15 +21,39 @@ const Home: NextPage = () => {
   const [messages, setMessages] = useState<Partial<Message>[]>([]);
   const { status } = useSession();
 
-  const send = () => {
-    setMessages([
-      ...messages,
-      {
-        id: crypto.randomUUID(),
-        name: process.env.NEXT_PUBLIC_ADMIN_NAME,
-        message,
-      },
-    ]);
+  const send = async () => {
+    try {
+      setMessages([
+        ...messages,
+        {
+          id: crypto.randomUUID(),
+          name: process.env.NEXT_PUBLIC_ADMIN_NAME,
+          message,
+        },
+      ]);
+      const res = await fetch("/api/chat/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message,
+        }),
+      });
+
+      const { response } = await res.json();
+      setMessages((curr) => [
+        ...curr,
+        {
+          id: crypto.randomUUID(),
+          name: "Chad",
+          message: response,
+          picture: "https://i.ibb.co/fnJpP03/chad.png",
+        },
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Redirect to login if unauthenticated
