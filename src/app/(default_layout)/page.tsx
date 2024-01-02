@@ -8,10 +8,13 @@ import TextareaAutosize from "react-textarea-autosize";
 
 import { ChatMessage } from "~/components";
 
+type Role = "user" | "assistant";
+
 type Message = {
   id: string;
   name: string;
   message: string;
+  role: Role;
   picture?: string | undefined;
 };
 
@@ -21,21 +24,26 @@ export default function Home() {
 
   const send = async () => {
     try {
-      setMessages([
+      const newMessages = [
         ...messages,
         {
           id: crypto.randomUUID(),
           name: process.env.NEXT_PUBLIC_ADMIN_NAME,
           message,
+          role: "user" as Role,
         },
-      ]);
+      ];
+      setMessages(newMessages);
       const res = await fetch("/api/chat/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message,
+          messages: newMessages.map(({ role, message }) => ({
+            role,
+            content: message,
+          })),
         }),
       });
 
@@ -49,6 +57,7 @@ export default function Home() {
             name: "Chad",
             message: response,
             picture: "https://i.ibb.co/fnJpP03/chad.png",
+            role: "assistant" as Role,
           },
         ]);
       }
