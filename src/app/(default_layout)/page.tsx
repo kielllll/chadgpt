@@ -61,14 +61,20 @@ export default function Home() {
       });
 
       if (res.status === 200) {
-        const response = await res.json();
+        const response = (await res.json()) as {
+          choices: {
+            message: {
+              content: string;
+            };
+          }[];
+        };
 
         setMessages((curr) => [
           ...curr,
           {
             id: crypto.randomUUID(),
             name: "Chad",
-            message: response.choices[0].message.content ?? "",
+            message: response?.choices?.[0]?.message?.content ?? "",
             picture: "https://i.ibb.co/fnJpP03/chad.png",
             role: "assistant" as Role,
           },
@@ -140,6 +146,7 @@ export default function Home() {
                 if (ev.key === "Enter") {
                   if (ev.shiftKey) return;
                   ev.preventDefault();
+                  /* eslint-disable @typescript-eslint/no-floating-promises */
                   send();
                   setMessage("");
                 }
@@ -149,6 +156,7 @@ export default function Home() {
           />
           <button
             onClick={() => {
+              /* eslint-disable @typescript-eslint/no-floating-promises */
               send();
               setMessage("");
             }}

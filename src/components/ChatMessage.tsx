@@ -9,7 +9,7 @@ type Message = {
 const ChatMessage = ({ message, name, picture }: Message) => {
   const avatar =
     picture && picture?.length > 0 ? (
-      <Image src={picture as string} alt="avatar" height={40} width={40} />
+      <Image src={picture } alt="avatar" height={40} width={40} />
     ) : (
       <span className="flex h-full w-full items-center justify-center text-sm font-medium text-gray-500">
         {name?.charAt(0).toUpperCase() ?? "A"}
