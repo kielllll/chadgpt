@@ -59,7 +59,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="tablet:mx-12 desktop:mx-[20.5%] mx-7 flex h-[80vh] w-[600px] flex-col rounded-xl bg-pearl">
+      <div className="desktop:mx-[20.5%] mx-7 flex h-[80vh] max-h-[80vh] flex-col rounded-xl bg-pearl min-[320px]:w-[90vw] md:mx-12 lg:w-[600px]">
         <div className="flex h-[10%] items-center rounded-t-xl border-b-2 bg-gray-200 p-2">
           <div className="flex items-center gap-2">
             <Image
@@ -83,7 +83,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-        <div className="flex flex-1 flex-col p-2">
+        <div className="flex flex-1 flex-col overflow-y-scroll p-2">
           {messages.length > 0 &&
             messages.map(({ id, name, message, picture }) => (
               <ChatMessage
