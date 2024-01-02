@@ -68,7 +68,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="desktop:mx-[20.5%] mx-7 flex h-[80vh] max-h-[80vh] flex-col rounded-xl bg-pearl min-[320px]:w-[90vw] md:mx-12 lg:w-[600px]">
+      <div className="desktop:mx-[20.5%] bg-pearl mx-7 flex h-[80vh] max-h-[80vh] flex-col rounded-xl min-[320px]:w-[90vw] md:mx-12 lg:w-[600px]">
         <div className="flex h-[10%] items-center rounded-t-xl border-b-2 bg-gray-200 p-2">
           <div className="flex items-center gap-2">
             <Image
@@ -92,7 +92,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-        <div className="flex flex-1 flex-col overflow-y-scroll p-2">
+        <div className="flex flex-1 flex-col overflow-y-scroll bg-white p-2">
           {messages.length > 0 &&
             messages.map(({ id, name, message, picture }) => (
               <ChatMessage
@@ -129,6 +129,7 @@ export default function Home() {
               setMessage("");
             }}
             className="cursor-pointer rounded-full p-1 text-gray-600 hover:bg-gray-300 active:translate-y-[1px]"
+            disabled={message.length === 0}
           >
             <BiSend size={24} />
           </button>
