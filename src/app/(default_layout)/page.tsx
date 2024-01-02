@@ -5,8 +5,11 @@ import Image from "next/image";
 import { AiOutlineClear } from "react-icons/ai";
 import { BiSend } from "react-icons/bi";
 import TextareaAutosize from "react-textarea-autosize";
+import { useAtom } from "jotai";
 
 import { ChatMessage } from "~/components";
+import { openAiTokenAtom } from "~/atoms";
+import { Input } from "~/components/ui/input";
 
 type Role = "user" | "assistant";
 
@@ -19,6 +22,7 @@ type Message = {
 };
 
 export default function Home() {
+  const [openAiToken, setOpenAiToken] = useAtom(openAiTokenAtom);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Partial<Message>[]>([]);
 
@@ -34,28 +38,37 @@ export default function Home() {
         },
       ];
       setMessages(newMessages);
-      const res = await fetch("/api/chat/send", {
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${openAiToken}`,
         },
         body: JSON.stringify({
+          model: "gpt-3.5-turbo",
           messages: newMessages.map(({ role, message }) => ({
             role,
             content: message,
           })),
+          temperature: 0.7,
+          top_p: 1,
+          frequency_penalty: 0,
+          presence_penalty: 0,
+          max_tokens: 200,
+          stream: false,
+          n: 1,
         }),
       });
 
       if (res.status === 200) {
-        const { response } = await res.json();
+        const response = await res.json();
 
         setMessages((curr) => [
           ...curr,
           {
             id: crypto.randomUUID(),
             name: "Chad",
-            message: response,
+            message: response.choices[0].message.content ?? "",
             picture: "https://i.ibb.co/fnJpP03/chad.png",
             role: "assistant" as Role,
           },
@@ -68,7 +81,17 @@ export default function Home() {
 
   return (
     <>
-      <div className="desktop:mx-[20.5%] bg-pearl mx-7 flex h-[80vh] max-h-[80vh] flex-col rounded-xl min-[320px]:w-[90vw] md:mx-12 lg:w-[600px]">
+      <div className="mb-2 flex items-center gap-4 rounded-xl border-gray-50 bg-white p-4 min-[320px]:w-[90vw] lg:w-[600px]">
+        <Input
+          placeholder="OpenAI Access Token"
+          value={openAiToken}
+          onChange={(e) => {
+            setOpenAiToken(e.target.value);
+          }}
+        />
+      </div>
+
+      <div className="desktop:mx-[20.5%] mx-7 mt-4 flex h-[80vh] max-h-[80vh] flex-col rounded-xl min-[320px]:w-[90vw] md:mx-12 lg:w-[600px]">
         <div className="flex h-[10%] items-center rounded-t-xl border-b-2 bg-gray-200 p-2">
           <div className="flex items-center gap-2">
             <Image
@@ -122,6 +145,7 @@ export default function Home() {
                 }
               }
             }}
+            disabled={!openAiToken}
           />
           <button
             onClick={() => {
@@ -129,7 +153,7 @@ export default function Home() {
               setMessage("");
             }}
             className="cursor-pointer rounded-full p-1 text-gray-600 hover:bg-gray-300 active:translate-y-[1px]"
-            disabled={message.length === 0}
+            disabled={message.length === 0 || !openAiToken}
           >
             <BiSend size={24} />
           </button>

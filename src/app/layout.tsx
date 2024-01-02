@@ -1,15 +1,16 @@
 "use client";
+import { Provider } from "jotai";
 
 import "./globals.css";
-
-import { api } from "~/utils/api";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Provider>{children}</Provider>
+      </body>
     </html>
   );
 }
 
-export default api.withTRPC(RootLayout);
+export default RootLayout;
