@@ -1,25 +1,23 @@
-import { type NextPage } from "next";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import Router from "next/router";
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { AiOutlineClear } from "react-icons/ai";
 import { BiSend } from "react-icons/bi";
 import TextareaAutosize from "react-textarea-autosize";
 
-import { Layout, ChatMessage } from "~/components";
+import { ChatMessage } from "~/components";
 
 type Message = {
-  id: string | undefined;
-  name: string | undefined;
-  message: string | undefined;
-  picture: string | undefined;
+  id: string;
+  name: string;
+  message: string;
+  picture?: string | undefined;
 };
 
-const Home: NextPage = () => {
+export default function Home() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Partial<Message>[]>([]);
-  const { status } = useSession();
 
   const send = async () => {
     try {
@@ -41,31 +39,26 @@ const Home: NextPage = () => {
         }),
       });
 
-      const { response } = await res.json();
-      setMessages((curr) => [
-        ...curr,
-        {
-          id: crypto.randomUUID(),
-          name: "Chad",
-          message: response,
-          picture: "https://i.ibb.co/fnJpP03/chad.png",
-        },
-      ]);
+      if (res.status === 200) {
+        const { response } = await res.json();
+
+        setMessages((curr) => [
+          ...curr,
+          {
+            id: crypto.randomUUID(),
+            name: "Chad",
+            message: response,
+            picture: "https://i.ibb.co/fnJpP03/chad.png",
+          },
+        ]);
+      }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
-  // Redirect to login if unauthenticated
-  useEffect(() => {
-    if (status === "unauthenticated") Router.replace("/login");
-  }, [status]);
-
-  // Initial render if unauthenticated
-  if (status === "unauthenticated") return <div>Unauthenticated</div>;
-
   return (
-    <Layout>
+    <>
       <div className="tablet:mx-12 desktop:mx-[20.5%] mx-7 flex h-[80vh] w-[600px] flex-col rounded-xl bg-pearl">
         <div className="flex h-[10%] items-center rounded-t-xl border-b-2 bg-gray-200 p-2">
           <div className="flex items-center gap-2">
@@ -132,8 +125,6 @@ const Home: NextPage = () => {
           </button>
         </div>
       </div>
-    </Layout>
+    </>
   );
-};
-
-export default Home;
+}
