@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 
 export default function SideBar() {
   return (
-    <aside className="sm:w-1/5 border-r-[1px]">
+    <aside className="sm:w-1/5 border-r-[1px] hidden sm:block">
       <div className="w-full flex flex-col gap-4 bg-slate-100 p-4">
         <div className="flex w-full justify-end items-center gap-1">
           <h1 className="text-2xl font-bold mr-auto">ChadGPT</h1>
