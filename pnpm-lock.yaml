@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@libsql/client':
-    specifier: ^0.9.0
+    specifier: 0.9.0
     version: 0.9.0
   '@radix-ui/react-slot':
     specifier: ^1.1.0
@@ -652,7 +652,7 @@ packages:
   /@libsql/hrana-client@0.6.2:
     resolution: {integrity: sha512-MWxgD7mXLNf9FXXiM0bc90wCjZSpErWKr5mGza7ERy2FJNNMXd7JIOv+DepBA1FQTIfI8TFO4/QDYgaQC0goNw==}
     dependencies:
-      '@libsql/isomorphic-fetch': 0.2.1
+      '@libsql/isomorphic-fetch': 0.2.2
       '@libsql/isomorphic-ws': 0.1.5
       js-base64: 3.7.7
       node-fetch: 3.3.2
@@ -661,8 +661,9 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@libsql/isomorphic-fetch@0.2.1:
-    resolution: {integrity: sha512-Sv07QP1Aw8A5OOrmKgRUBKe2fFhF2hpGJhtHe3d1aRnTESZCGkn//0zDycMKTGamVWb3oLYRroOsCV8Ukes9GA==}
+  /@libsql/isomorphic-fetch@0.2.2:
+    resolution: {integrity: sha512-xGN22unSkzfllb5ztjxweWoft3ysJgf4A4O0v8iiX/M+SPzHqBcIhoLbGhk7s3n5ZtOWCEf6ugGPfqpY6p08kQ==}
+    engines: {node: '>=18.0.0'}
     dev: false
 
   /@libsql/isomorphic-ws@0.1.5:

@@ -12,4 +12,6 @@ export default defineConfig({
     url: process.env.NEXT_APP_TURSO_CONNECTION_URL!,
     authToken: process.env.NEXT_APP_TURSO_AUTH_TOKEN!,
   },
+  verbose: true,
+  strict: true,
 })
