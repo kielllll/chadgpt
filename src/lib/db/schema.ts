@@ -4,6 +4,19 @@ import { index } from 'drizzle-orm/sqlite-core'
 import { text } from 'drizzle-orm/sqlite-core'
 import { integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 
+export const users = sqliteTable(
+  'users',
+  {
+    id: integer('id').primaryKey(),
+    model: text('model').notNull(),
+    createdAt: text('createdAt').default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text('updatedAt').default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    idxUsersModel: index('idx_users_model').on(table.model),
+  })
+)
+
 export const conversations = sqliteTable(
   'conversations',
   {
@@ -37,9 +50,20 @@ export const messages = sqliteTable(
   })
 )
 
-export const conversationsRelations = relations(conversations, ({ many }) => ({
-  messages: many(messages),
+export const userRelations = relations(users, ({ many }) => ({
+  conversations: many(conversations),
 }))
+
+export const conversationsRelations = relations(
+  conversations,
+  ({ one, many }) => ({
+    user: one(users, {
+      fields: [conversations.userId],
+      references: [users.id],
+    }),
+    messages: many(messages),
+  })
+)
 
 export const messagesRelations = relations(messages, ({ one }) => ({
   conversation: one(conversations, {
