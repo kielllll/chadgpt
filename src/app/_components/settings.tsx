@@ -11,9 +11,10 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuItem,
+  DropdownMenuGroup,
 } from '@/components/ui/dropdown-menu'
-import { LuUnplug } from 'react-icons/lu'
 import { AiOutlineClear } from 'react-icons/ai'
+import ApiKeyDialog from './api-key-dialog'
 
 const MODELS = [
   {
@@ -46,24 +47,25 @@ export default function Settings() {
         <GoGear size={24} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>AI Models</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-lg">AI Models</DropdownMenuLabel>
         <DropdownMenuRadioGroup value={model} onValueChange={setModel}>
           {MODELS.map(({ name, value }) => (
-            <DropdownMenuRadioItem key={value} value={value}>
+            <DropdownMenuRadioItem key={value} value={value} aria-label={name}>
               {name}
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>General Settings</DropdownMenuLabel>
-        <DropdownMenuItem>
-          <LuUnplug size={18} className="mr-2" />
-          <span>Add API Key</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <AiOutlineClear size={18} className="mr-2" />
-          <span>Clear Conversations</span>
-        </DropdownMenuItem>
+        <DropdownMenuLabel className="text-lg">
+          General Settings
+        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <ApiKeyDialog />
+          <DropdownMenuItem aria-label="Clear Conversations">
+            <AiOutlineClear size={18} className="mr-2" />
+            <span>Clear Conversations</span>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )
