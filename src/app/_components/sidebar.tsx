@@ -1,6 +1,6 @@
 import { BsLayoutSidebar } from 'react-icons/bs'
-import { GoGear } from 'react-icons/go'
 import { Button } from '@/components/ui/button'
+import Settings from './settings'
 
 export default function SideBar() {
   return (
@@ -16,14 +16,7 @@ export default function SideBar() {
           >
             <BsLayoutSidebar size={24} />
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="bg-inherit hover:bg-slate-200"
-            aria-label="Settings"
-          >
-            <GoGear size={24} />
-          </Button>
+          <Settings />
         </div>
         <h2>Conversations</h2>
       </div>
