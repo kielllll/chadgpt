@@ -69,9 +69,10 @@ export default function ApiKeyDialog() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="ml-auto">
-              Submit
-            </Button>
+            <div className="mt-2 flex justify-end items-center gap-2">
+              <Button onClick={() => setOpened(false)}>Cancel</Button>
+              <Button type="submit">Submit</Button>
+            </div>
           </form>
         </Form>
       </DialogContent>
