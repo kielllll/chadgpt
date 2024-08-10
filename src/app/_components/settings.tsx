@@ -10,11 +10,10 @@ import {
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuItem,
   DropdownMenuGroup,
 } from '@/components/ui/dropdown-menu'
-import { AiOutlineClear } from 'react-icons/ai'
 import ApiKeyDialog from './api-key-dialog'
+import ClearHistoryDialog from './clear-history-dialog'
 
 const MODELS = [
   {
@@ -61,10 +60,7 @@ export default function Settings() {
         </DropdownMenuLabel>
         <DropdownMenuGroup>
           <ApiKeyDialog />
-          <DropdownMenuItem aria-label="Clear Conversations">
-            <AiOutlineClear size={18} className="mr-2" />
-            <span>Clear Conversations</span>
-          </DropdownMenuItem>
+          <ClearHistoryDialog />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
