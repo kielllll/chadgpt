@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { memo } from 'react'
 
 interface MessageProps {
   id: string
@@ -11,7 +12,7 @@ interface MessageProps {
   className?: string
 }
 
-export default function Message(props: MessageProps) {
+function Message(props: MessageProps) {
   const isUser = props.role === 'user'
 
   return (
@@ -29,3 +30,5 @@ export default function Message(props: MessageProps) {
     </div>
   )
 }
+
+export default memo(Message)

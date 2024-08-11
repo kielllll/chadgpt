@@ -8,12 +8,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { useForm } from 'react-hook-form'
 import { Form, FormField } from '@/components/ui/form'
 import { useApikey } from '../_hooks/useApiKey'
-import { send } from '@/server/conversation'
 
 type Message = {
   id: string
   conversationId: string
-  role: any
+  role: string
   content: string
   createdAt: string
   updatedAt: string
@@ -46,27 +45,43 @@ export default function Chat() {
     addOptimisticMessage(newMessage)
     setMessages((prev) => [...prev, newMessage])
 
-    const res = await send(apiKey, [
-      ...optimisticMessages.map(({ role, content }) => ({ role, content })),
-      {
-        role: 'user',
-        content: message,
+    const res = await fetch('/api/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    ])
+      body: JSON.stringify({ apiKey, messages: [...messages, newMessage] }),
+    })
 
-    startTransition(() =>
-      setMessages((prev) => [
-        ...prev,
+    if (res.body) {
+      const newMessages = [
+        ...messages,
+        { ...newMessage, id: crypto.randomUUID() },
         {
-          id: res.id,
-          conversationId: crypto.randomUUID(),
-          role: res?.role || 'assistant',
-          content: res?.content || '',
+          id: crypto.randomUUID(), // TODO: use res.id
+          conversationId: crypto.randomUUID(), // TODO: add conversation functionality
+          role: 'assistant', // TODO: use res.role
+          content: '',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         },
-      ])
-    )
+      ]
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+
+      let content = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        content += decoder.decode(value)
+
+        newMessages[newMessages.length - 1].content = content
+        setMessages(newMessages)
+      }
+    }
   }
 
   return (
