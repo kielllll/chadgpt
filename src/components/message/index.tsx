@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 
 interface MessageProps {
-  messageId: string
+  id: string
   conversationId: string
   role: 'user' | 'assistant' | 'system' | (string & {})
   content: string
