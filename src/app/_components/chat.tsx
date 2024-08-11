@@ -1,10 +1,16 @@
+'use client'
+
 import Image from 'next/image'
 import Message from '@/components/message'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { DUMMY } from '@/lib/utils'
+import { useForm } from 'react-hook-form'
+import { Form, FormField } from '@/components/ui/form'
 
 export default function Chat() {
+  const form = useForm()
+
   return (
     <section className="flex flex-col p-4 w-full">
       {DUMMY.length > 0 ? (
@@ -30,10 +36,19 @@ export default function Chat() {
           <p className="text-primary">Start a conversation, King 👑</p>
         </div>
       )}
-      <form className="mt-auto flex items-center gap-2 w-full">
-        <Textarea rows={1} className="min-h-10" />
-        <Button className="bg-black">Send</Button>
-      </form>
+      <Form {...form}>
+        <form className="mt-auto flex items-center gap-2 w-full">
+          <FormField
+            control={form.control}
+            name="message"
+            render={() => <Textarea rows={1} className="min-h-10" />}
+          />
+
+          <Button type="submit" className="bg-black">
+            Send
+          </Button>
+        </form>
+      </Form>
     </section>
   )
 }
