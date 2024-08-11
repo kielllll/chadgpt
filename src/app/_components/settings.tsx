@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import ApiKeyDialog from './api-key-dialog'
 import ClearHistoryDialog from './clear-history-dialog'
+import { setModel as dbSetModel } from '@/server/apikey'
 
 const MODELS = [
   {
@@ -36,6 +37,15 @@ const MODELS = [
 
 export default function Settings() {
   const [model, setModel] = useState('gpt-4o-mini')
+  const handleModelSelect = async (value: string) => {
+    const apiKey = localStorage.getItem('apiKey') || ''
+
+    const res = await dbSetModel(apiKey, value)
+
+    if (res) {
+      setModel(value)
+    }
+  }
 
   return (
     <DropdownMenu>
@@ -47,7 +57,7 @@ export default function Settings() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="text-lg">AI Models</DropdownMenuLabel>
-        <DropdownMenuRadioGroup value={model} onValueChange={setModel}>
+        <DropdownMenuRadioGroup value={model} onValueChange={handleModelSelect}>
           {MODELS.map(({ name, value }) => (
             <DropdownMenuRadioItem key={value} value={value} aria-label={name}>
               {name}
