@@ -1,27 +1,68 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import Message from '@/components/message'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { DUMMY } from '@/lib/utils'
 import { useForm } from 'react-hook-form'
 import { Form, FormField } from '@/components/ui/form'
 import { useApikey } from '../_hooks/useApiKey'
+import { send } from '@/server/conversation'
 
 export default function Chat() {
+  const [messages, setMessages] = useState<any[]>([])
   const apiKey = useApikey()
   const form = useForm()
 
+  const handleSendAction = async (formData: FormData) => {
+    const message = formData.get('message') as string
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: crypto.randomUUID(),
+        conversationId: crypto.randomUUID(),
+        role: 'user',
+        content: message,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ])
+
+    const res = await send(apiKey, [
+      ...messages.map(({ role, content }) => ({ role, content })),
+      {
+        role: 'user',
+        content: message,
+      },
+    ])
+
+    console.log('chat.tsx: DEBUG ====== ', res)
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        messageId: res.id,
+        conversationId: crypto.randomUUID(),
+        role: res?.role || 'assistant',
+        content: res?.content || '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ])
+
+    form.setValue('message', '')
+  }
+
   return (
     <section className="flex flex-col p-4 w-full">
-      {DUMMY.length > 0 ? (
+      {messages.length > 0 ? (
         <div className="flex flex-col">
-          {DUMMY.map((message) => (
+          {messages.map((message) => (
             <Message
               className={message.role === 'user' ? 'ml-auto' : ''}
-              key={message.messageId}
+              key={message.id}
               {...message}
             />
           ))}
@@ -40,12 +81,19 @@ export default function Chat() {
         </div>
       )}
       <Form {...form}>
-        <form className="mt-auto flex items-center gap-2 w-full">
+        <form
+          className="mt-auto flex items-center gap-2 w-full"
+          action={handleSendAction}
+        >
           <FormField
             control={form.control}
             name="message"
             render={() => (
-              <Textarea rows={1} name="message" className="min-h-10" />
+              <Textarea
+                rows={1}
+                className="min-h-10"
+                {...form.register('message')}
+              />
             )}
           />
 
