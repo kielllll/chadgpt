@@ -8,18 +8,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { DUMMY } from '@/lib/utils'
 import { useForm } from 'react-hook-form'
 import { Form, FormField } from '@/components/ui/form'
+import { useApikey } from '../_hooks/useApiKey'
 
 export default function Chat() {
-  const [apiKey, setApiKey] = useState('')
+  const apiKey = useApikey()
   const form = useForm()
-
-  useEffect(() => {
-    const apiKey = localStorage.getItem('apiKey') || ''
-
-    if (apiKey) {
-      setApiKey(apiKey)
-    }
-  }, [])
 
   return (
     <section className="flex flex-col p-4 w-full">
@@ -51,7 +44,9 @@ export default function Chat() {
           <FormField
             control={form.control}
             name="message"
-            render={() => <Textarea rows={1} className="min-h-10" />}
+            render={() => (
+              <Textarea rows={1} name="message" className="min-h-10" />
+            )}
           />
 
           <Button type="submit" className="bg-black" disabled={!apiKey}>

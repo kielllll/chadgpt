@@ -15,6 +15,7 @@ import {
 import ApiKeyDialog from './api-key-dialog'
 import ClearHistoryDialog from './clear-history-dialog'
 import { setModel as dbSetModel } from '@/server/apikey'
+import { useApikey } from '../_hooks/useApiKey'
 
 const MODELS = [
   {
@@ -36,16 +37,8 @@ const MODELS = [
 ]
 
 export default function Settings() {
-  const [apiKey, setApiKey] = useState('')
+  const apiKey = useApikey()
   const [model, setModel] = useState('gpt-4o-mini')
-
-  useEffect(() => {
-    const apiKey = localStorage.getItem('apiKey') || ''
-
-    if (apiKey) {
-      setApiKey(apiKey)
-    }
-  }, [])
 
   const handleModelSelect = async (value: string) => {
     const res = await dbSetModel(apiKey, value)
