@@ -8,7 +8,7 @@ export const users = sqliteTable(
   'users',
   {
     id: text('id').primaryKey(),
-    model: text('model').notNull(),
+    model: text('model'),
     createdAt: text('createdAt').default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text('updatedAt').default(sql`CURRENT_TIMESTAMP`),
   },
