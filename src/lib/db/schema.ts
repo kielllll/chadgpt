@@ -7,7 +7,7 @@ import { integer, sqliteTable } from 'drizzle-orm/sqlite-core'
 export const users = sqliteTable(
   'users',
   {
-    id: integer('id').primaryKey(),
+    id: text('id').primaryKey(),
     model: text('model').notNull(),
     createdAt: text('createdAt').default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text('updatedAt').default(sql`CURRENT_TIMESTAMP`),
@@ -20,8 +20,8 @@ export const users = sqliteTable(
 export const conversations = sqliteTable(
   'conversations',
   {
-    id: integer('id').primaryKey(),
-    userId: integer('userId').notNull(),
+    id: text('id').primaryKey(),
+    userId: text('userId').notNull(),
     title: text('title').notNull(),
     createdAt: text('createdAt').default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text('updatedAt').default(sql`CURRENT_TIMESTAMP`),
@@ -34,8 +34,8 @@ export const conversations = sqliteTable(
 export const messages = sqliteTable(
   'messages',
   {
-    id: integer('id').primaryKey(),
-    conversationId: integer('conversationId').notNull(),
+    id: text('id').primaryKey(),
+    conversationId: text('conversationId').notNull(),
     role: text('role').notNull(),
     content: text('content').notNull(),
     metadata: text('metadata'),

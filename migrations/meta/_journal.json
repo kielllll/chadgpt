@@ -15,6 +15,20 @@
       "when": 1723314632237,
       "tag": "0001_sparkling_king_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1723358155123,
+      "tag": "0002_awesome_oracle",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1723358238187,
+      "tag": "0003_tired_harpoon",
+      "breakpoints": true
     }
   ]
 }
