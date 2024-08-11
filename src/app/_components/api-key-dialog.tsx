@@ -25,8 +25,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { addApiKey } from '@/server/apikey'
 
-export default function ApiKeyDialog() {
+export default function ApiKeyDialog({ apiKey }: { apiKey: string }) {
   const [opened, setOpened] = useState(false)
+
   const form = useForm<{
     apiKey: string
   }>()
@@ -77,6 +78,7 @@ export default function ApiKeyDialog() {
                       type="text"
                       name="apiKey"
                       className="focus:!ring-0 focus:border-primary"
+                      defaultValue={apiKey}
                     />
                   </FormControl>
                   <FormDescription />

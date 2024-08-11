@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Message from '@/components/message'
 import { Button } from '@/components/ui/button'
@@ -9,7 +10,16 @@ import { useForm } from 'react-hook-form'
 import { Form, FormField } from '@/components/ui/form'
 
 export default function Chat() {
+  const [apiKey, setApiKey] = useState('')
   const form = useForm()
+
+  useEffect(() => {
+    const apiKey = localStorage.getItem('apiKey') || ''
+
+    if (apiKey) {
+      setApiKey(apiKey)
+    }
+  }, [])
 
   return (
     <section className="flex flex-col p-4 w-full">
@@ -44,7 +54,7 @@ export default function Chat() {
             render={() => <Textarea rows={1} className="min-h-10" />}
           />
 
-          <Button type="submit" className="bg-black">
+          <Button type="submit" className="bg-black" disabled={!apiKey}>
             Send
           </Button>
         </form>

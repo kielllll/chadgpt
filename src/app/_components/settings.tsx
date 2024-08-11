@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { GoGear } from 'react-icons/go'
 import {
   DropdownMenu,
@@ -36,10 +36,18 @@ const MODELS = [
 ]
 
 export default function Settings() {
+  const [apiKey, setApiKey] = useState('')
   const [model, setModel] = useState('gpt-4o-mini')
-  const handleModelSelect = async (value: string) => {
+
+  useEffect(() => {
     const apiKey = localStorage.getItem('apiKey') || ''
 
+    if (apiKey) {
+      setApiKey(apiKey)
+    }
+  }, [])
+
+  const handleModelSelect = async (value: string) => {
     const res = await dbSetModel(apiKey, value)
 
     if (res) {
@@ -59,7 +67,12 @@ export default function Settings() {
         <DropdownMenuLabel className="text-lg">AI Models</DropdownMenuLabel>
         <DropdownMenuRadioGroup value={model} onValueChange={handleModelSelect}>
           {MODELS.map(({ name, value }) => (
-            <DropdownMenuRadioItem key={value} value={value} aria-label={name}>
+            <DropdownMenuRadioItem
+              key={value}
+              value={value}
+              aria-label={name}
+              disabled={!apiKey}
+            >
               {name}
             </DropdownMenuRadioItem>
           ))}
@@ -69,7 +82,7 @@ export default function Settings() {
           General Settings
         </DropdownMenuLabel>
         <DropdownMenuGroup>
-          <ApiKeyDialog />
+          <ApiKeyDialog apiKey={apiKey} />
           <ClearHistoryDialog />
         </DropdownMenuGroup>
       </DropdownMenuContent>
