@@ -1,6 +1,6 @@
 'use client'
 
-import { startTransition, useOptimistic, useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import Message from '@/components/message'
 import { Button } from '@/components/ui/button'
@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useForm } from 'react-hook-form'
 import { Form, FormField } from '@/components/ui/form'
 import { useApikey } from '../_hooks/useApiKey'
+import { flushSync } from 'react-dom'
 
 type Message = {
   id: string
@@ -20,15 +21,20 @@ type Message = {
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([])
-  const [optimisticMessages, addOptimisticMessage] = useOptimistic<
-    Message[],
-    Message
-  >(messages, (currentState, optimisticValue) => [
-    ...currentState,
-    optimisticValue,
-  ])
   const apiKey = useApikey()
   const form = useForm()
+
+  const addMessage = (message: Message) => {
+    setMessages((prevMessages) => [...prevMessages, message])
+  }
+
+  const updateLastMessage = (content: string) => {
+    setMessages((prevMessages) =>
+      prevMessages.map((msg, idx) =>
+        idx === prevMessages.length - 1 ? { ...msg, content } : msg
+      )
+    )
+  }
 
   const handleSendAction = async (formData: FormData) => {
     const message = formData.get('message') as string
@@ -42,8 +48,10 @@ export default function Chat() {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
-    addOptimisticMessage(newMessage)
-    setMessages((prev) => [...prev, newMessage])
+
+    flushSync(() => {
+      addMessage(newMessage)
+    })
 
     const res = await fetch('/api/send', {
       method: 'POST',
@@ -54,18 +62,14 @@ export default function Chat() {
     })
 
     if (res.body) {
-      const newMessages = [
-        ...messages,
-        { ...newMessage, id: crypto.randomUUID() },
-        {
-          id: crypto.randomUUID(), // TODO: use res.id
-          conversationId: crypto.randomUUID(), // TODO: add conversation functionality
-          role: 'assistant', // TODO: use res.role
-          content: '',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-      ]
+      addMessage({
+        id: crypto.randomUUID(), // TODO: use res.id
+        conversationId: crypto.randomUUID(), // TODO: add conversation functionality
+        role: 'assistant', // TODO: use res.role
+        content: '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
 
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
@@ -78,17 +82,16 @@ export default function Chat() {
 
         content += decoder.decode(value)
 
-        newMessages[newMessages.length - 1].content = content
-        setMessages(newMessages)
+        updateLastMessage(content)
       }
     }
   }
 
   return (
     <section className="flex flex-col p-4 w-full">
-      {optimisticMessages.length > 0 ? (
+      {messages.length > 0 ? (
         <div className="flex flex-col">
-          {optimisticMessages.map((message) => (
+          {messages.map((message) => (
             <Message
               className={message.role === 'user' ? 'ml-auto' : ''}
               key={message.id}
