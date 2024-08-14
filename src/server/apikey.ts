@@ -11,7 +11,8 @@ export async function addApiKey(apiKey: string) {
       where: eq(users.id, apiKey),
     })
 
-    if (user) throw new Error('API key already exists')
+    // return if it exists
+    if (user) return apiKey
 
     await db.insert(users).values({
       id: apiKey,
