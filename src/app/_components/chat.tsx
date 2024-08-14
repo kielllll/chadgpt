@@ -37,9 +37,9 @@ export default function Chat() {
     )
   }
 
-  const handleSendAction = async (formData: FormData) => {
-    const message = formData.get('message') as string
-    form.setValue('message', '')
+  const send = async (message: string) => {
+    // reset form value
+    form.reset()
 
     const newMessage = {
       id: crypto.randomUUID(),
@@ -88,6 +88,19 @@ export default function Chat() {
     }
   }
 
+  const handleSendAction = async (formData: FormData) => {
+    const message = formData.get('message') as string
+
+    await send(message)
+  }
+
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && form.getValues('message') !== '') {
+      e.preventDefault()
+      await send(form.getValues('message'))
+    }
+  }
+
   return (
     <section className="flex flex-col p-4 w-full">
       {messages.length > 0 ? (
@@ -131,6 +144,7 @@ export default function Chat() {
                 rows={1}
                 className="min-h-10"
                 {...form.register('message')}
+                onKeyDown={handleKeyDown}
               />
             )}
           />
