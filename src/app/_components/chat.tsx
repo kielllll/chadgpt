@@ -91,7 +91,7 @@ export default function Chat() {
   return (
     <section className="flex flex-col p-4 w-full">
       {messages.length > 0 ? (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
           {messages.map((message) => (
             <Message
               className={message.role === 'user' ? 'ml-auto' : ''}
