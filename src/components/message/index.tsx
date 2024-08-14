@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn, formatISO } from '@/lib/utils'
 import { memo } from 'react'
 
 interface MessageProps {
@@ -7,7 +7,7 @@ interface MessageProps {
   role: 'user' | 'assistant' | 'system' | (string & {})
   content: string
   metadata?: string
-  createdAt: string | number
+  createdAt: string
   updatedAt: string | number
   className?: string
 }
@@ -26,7 +26,9 @@ function Message(props: MessageProps) {
       <p className={cn('text-sm', isUser ? 'text-secondary' : 'text-primary')}>
         {props.content}
       </p>
-      <span className="text-xs text-muted-foreground">{props.createdAt}</span>
+      <span className="text-xs text-muted-foreground">
+        {formatISO(props.createdAt)}
+      </span>
     </div>
   )
 }
