@@ -109,7 +109,12 @@ export default function Chat() {
               fill
             />
           </div>
-          <p className="text-primary">Start a conversation, King 👑</p>
+          <p className="text-primary">
+            {apiKey
+              ? 'Start a conversation'
+              : 'Setup your API key in the settings'}
+            , King 👑
+          </p>
         </div>
       )}
       <Form {...form}>
