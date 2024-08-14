@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { LuUnplug } from 'react-icons/lu'
+import { useSetAtom } from 'jotai'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import {
   Dialog,
@@ -24,19 +25,21 @@ import {
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { addApiKey } from '@/server/apikey'
+import { apiKeyAtom } from '@/lib/atoms'
 
 export default function ApiKeyDialog({ apiKey }: { apiKey: string }) {
   const [opened, setOpened] = useState(false)
+  const setApiKey = useSetAtom(apiKeyAtom)
 
   const form = useForm<{
     apiKey: string
   }>()
 
   const handleSubmit = async (formData: FormData) => {
-    const apiKey = await addApiKey(formData.get('apiKey') as string)
+    const res = await addApiKey(formData.get('apiKey') as string)
 
-    if (apiKey) {
-      localStorage.setItem('apiKey', apiKey)
+    if (res) {
+      setApiKey(res)
       setOpened(false)
     }
   }

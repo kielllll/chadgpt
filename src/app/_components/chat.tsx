@@ -7,8 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { useForm } from 'react-hook-form'
 import { Form, FormField } from '@/components/ui/form'
-import { useApikey } from '../_hooks/useApiKey'
 import { flushSync } from 'react-dom'
+import { useAtomValue } from 'jotai'
+import { apiKeyAtom } from '@/lib/atoms'
 
 type Message = {
   id: string
@@ -21,7 +22,7 @@ type Message = {
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([])
-  const apiKey = useApikey()
+  const apiKey = useAtomValue(apiKeyAtom)
   const form = useForm()
 
   const addMessage = (message: Message) => {

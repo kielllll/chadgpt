@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { GoGear } from 'react-icons/go'
+import { useAtomValue } from 'jotai'
 import {
   DropdownMenu,
   DropdownMenuLabel,
@@ -15,7 +16,7 @@ import {
 import ApiKeyDialog from './api-key-dialog'
 import ClearHistoryDialog from './clear-history-dialog'
 import { setModel as dbSetModel } from '@/server/apikey'
-import { useApikey } from '../_hooks/useApiKey'
+import { apiKeyAtom } from '@/lib/atoms'
 
 const MODELS = [
   {
@@ -37,7 +38,7 @@ const MODELS = [
 ]
 
 export default function Settings() {
-  const apiKey = useApikey()
+  const apiKey = useAtomValue(apiKeyAtom)
   const [model, setModel] = useState('gpt-4o-mini')
 
   const handleModelSelect = async (value: string) => {
