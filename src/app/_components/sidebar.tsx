@@ -1,13 +1,16 @@
 'use client'
 
+import { useAtomValue } from 'jotai'
 import { BsLayoutSidebar } from 'react-icons/bs'
 import { Button } from '@/components/ui/button'
 import Settings from './settings'
 import { useGetConversations } from '../_hooks/useGetConversations'
 import Link from 'next/link'
+import { apiKeyAtom } from '@/lib/atoms'
 
 export default function SideBar() {
-  const { data: conversations } = useGetConversations()
+  const apiKey = useAtomValue(apiKeyAtom) || ''
+  const { data: conversations } = useGetConversations(apiKey)
 
   return (
     <aside className="sm:w-1/5 border-r-[1px] hidden sm:block max-h-screen overflow-y-auto">
