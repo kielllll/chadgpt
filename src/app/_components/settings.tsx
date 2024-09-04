@@ -77,7 +77,7 @@ export default function Settings() {
         </DropdownMenuLabel>
         <DropdownMenuGroup>
           <ApiKeyDialog apiKey={apiKey} />
-          <ClearHistoryDialog />
+          <ClearHistoryDialog apiKey={apiKey} />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

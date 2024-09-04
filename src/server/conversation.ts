@@ -39,6 +39,20 @@ export async function getConversationsByUserId(userId: string) {
     return result
   } catch (error: any) {
     console.log(error)
-    throw new Error('conversation.ts: getConversations: ' + error)
+    throw new Error('conversation.ts: getConversationsByUserId: ' + error)
+  }
+}
+
+export async function removeConversationsByUserId(userId: string) {
+  try {
+    await db.delete(conversations).where(eq(conversations.userId, userId))
+
+    return {
+      success: true,
+      message: 'Conversations removed',
+    }
+  } catch (error: any) {
+    console.log(error)
+    throw new Error('conversation.ts: removeConversationsByUserId: ' + error)
   }
 }
