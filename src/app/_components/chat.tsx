@@ -146,9 +146,9 @@ export default function Chat({
   }
 
   return (
-    <section className="flex flex-col p-4 w-full gap-2">
+    <section className="flex flex-col py-4 pl-4 w-full gap-2">
       {messages.length > 0 ? (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 overflow-y-auto max-h-[90vh]">
           {messages.map((message) => (
             <Message
               className={message.role === 'user' ? 'ml-auto' : ''}
@@ -177,7 +177,7 @@ export default function Chat({
       )}
       <Form {...form}>
         <form
-          className="mt-auto flex items-center gap-2 w-full"
+          className="mt-auto flex items-center gap-2 w-full pr-4"
           action={handleSendAction}
         >
           <FormField
