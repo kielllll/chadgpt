@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db'
 import { conversations } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 
 export async function addConversation({
   userId,
@@ -33,6 +33,7 @@ export async function getConversationsByUserId(userId: string) {
   try {
     const result = await db.query.conversations.findMany({
       where: eq(conversations.userId, userId),
+      orderBy: desc(conversations.createdAt),
     })
 
     return result
