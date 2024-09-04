@@ -1,8 +1,8 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { conversations } from '@/lib/db/schema'
-import { desc, eq } from 'drizzle-orm'
+import { conversations, messages } from '@/lib/db/schema'
+import { desc, eq, inArray } from 'drizzle-orm'
 
 export async function addConversation({
   userId,
@@ -45,6 +45,24 @@ export async function getConversationsByUserId(userId: string) {
 
 export async function removeConversationsByUserId(userId: string) {
   try {
+    // get all conversations first
+    const convos = await db.query.conversations.findMany({
+      where: eq(conversations.userId, userId),
+      columns: {
+        id: true,
+      },
+    })
+
+    if (convos.length === 0) {
+      throw new Error('No conversations found')
+    }
+
+    const convoIds = convos.map((convo) => convo.id)
+
+    // delete all messages first
+    await db.delete(messages).where(inArray(messages.conversationId, convoIds))
+
+    // delete all conversations
     await db.delete(conversations).where(eq(conversations.userId, userId))
 
     return {
