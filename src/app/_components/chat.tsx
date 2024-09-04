@@ -14,6 +14,7 @@ import { apiKeyAtom } from '@/lib/atoms'
 import { addConversation } from '@/server/conversation'
 import { useGetMessagesByConversationId } from '../_hooks/useGetMessagesByConversationId'
 import { addMessages } from '@/server/message'
+import { useQueryClient } from '@tanstack/react-query'
 
 type Message = {
   id: string
@@ -30,6 +31,7 @@ export default function Chat({
   conversationId: string
 }) {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const [messages, setMessages] = useState<Message[]>([])
   const apiKey = useAtomValue(apiKeyAtom)
   const form = useForm()
@@ -129,6 +131,9 @@ export default function Chat({
     // redirect to conversation page if conversationId is empty
     if (conversationId === '') {
       router.push(`/c/${baseConversationId}`)
+      queryClient.invalidateQueries({
+        queryKey: ['conversations', apiKey],
+      })
     }
   }
 
