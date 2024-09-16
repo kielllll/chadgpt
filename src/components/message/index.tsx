@@ -26,9 +26,6 @@ function Message(props: MessageProps) {
         isUser ? 'bg-primary' : 'bg-secondary'
       )}
     >
-      {/* <p className={cn('text-sm', isUser ? 'text-secondary' : 'text-primary')}>
-        {props.content}
-      </p> */}
       <Markdown
         className={cn('text-sm', isUser ? 'text-secondary' : 'text-primary')}
         components={{
