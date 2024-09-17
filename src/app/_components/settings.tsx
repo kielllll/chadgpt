@@ -52,7 +52,7 @@ export default function Settings() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="bg-inherit hover:bg-slate-200 p-2 rounded-md"
+        className="bg-inherit hover:bg-gray-600 p-2 rounded-md"
         aria-label="Settings"
       >
         <GoGear size={24} />

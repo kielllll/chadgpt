@@ -153,7 +153,7 @@ export default function Chat({
   return (
     <section className="flex flex-col w-full gap-2 h-screen pb-4">
       {messages.length > 0 ? (
-        <div className="flex flex-col gap-4 pt-4 px-4 h-full overflow-y-auto">
+        <div className="flex flex-col gap-4 p-4 h-full overflow-y-auto">
           {messages.map((message) => (
             <Message
               className={message.role === 'user' ? 'ml-auto' : ''}

@@ -15,13 +15,13 @@ export default function SideBar() {
 
   return (
     <aside className="sm:w-3/12 border-r-[1px] hidden sm:block max-h-screen overflow-y-auto">
-      <div className="w-full flex flex-col gap-4 bg-slate-100 p-4">
+      <div className="w-full bg-gray-800 p-4">
         <div className="flex w-full justify-end items-center gap-1">
           <h1 className="text-2xl font-bold mr-auto">ChadGPT</h1>
           <Button
             variant="ghost"
             size="icon"
-            className="bg-inherit hover:bg-slate-200"
+            className="bg-inherit hover:bg-gray-600"
             aria-label="Toggle Sidebar"
           >
             <BsLayoutSidebar size={24} />
@@ -30,7 +30,7 @@ export default function SideBar() {
             <Button
               variant="ghost"
               size="icon"
-              className="bg-inherit hover:bg-slate-200"
+              className="bg-inherit hover:bg-gray-600"
               aria-label="Toggle Sidebar"
             >
               <BiMessageRoundedAdd size={24} />
@@ -38,16 +38,18 @@ export default function SideBar() {
           </Link>
           <Settings />
         </div>
-        <h2>Conversations</h2>
       </div>
-      <div className="w-full flex flex-col gap-4 py-4">
+      <div className="w-full flex flex-col py-4 gap-2">
         {conversations?.map((conversation) => (
           <Link
             key={conversation.id}
             href={`/c/${conversation.id}`}
-            className="hover:bg-gray-300 p-4 rounded-lg"
+            className="px-1 flex flex-col gap-2"
           >
-            {conversation.title}
+            <div className="hover:bg-gray-900 rounded-lg p-4">
+              {conversation.title}
+            </div>
+            <div className="border-t-[1px] border-gray-700 w-full" />
           </Link>
         ))}
       </div>
