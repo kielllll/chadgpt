@@ -156,7 +156,7 @@ export default function ChatArea({
       <Messages messages={messages} apiKey={apiKey} />
       <Form {...form}>
         <form
-          className="mt-auto flex mx-auto gap-2 w-1/2"
+          className="mt-auto flex mx-auto gap-2 w-11/12 lg:w-1/2"
           action={handleSendAction}
         >
           <FormField
@@ -165,14 +165,14 @@ export default function ChatArea({
             render={() => (
               <Textarea
                 rows={1}
-                className="min-h-10"
+                className="min-h-10 border-gray-700 max-h-72"
                 {...form.register('message')}
                 onKeyDown={handleKeyDown}
               />
             )}
           />
 
-          <Button type="submit" className="bg-black" disabled={!apiKey}>
+          <Button type="submit" disabled={!apiKey}>
             Send
           </Button>
         </form>

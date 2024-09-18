@@ -14,7 +14,7 @@ export default function SideBar() {
   const { data: conversations } = useGetConversations(apiKey)
 
   return (
-    <aside className="sm:w-3/12 border-r-[1px] hidden sm:block max-h-screen overflow-y-auto">
+    <aside className="lg:w-3/12 md:w-3/5 border-r-[1px] hidden sm:block max-h-screen overflow-y-auto">
       <div className="w-full bg-gray-800 p-4">
         <div className="flex w-full justify-end items-center gap-1">
           <h1 className="text-2xl font-bold mr-auto">ChadGPT</h1>
