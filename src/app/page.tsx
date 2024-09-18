@@ -1,5 +1,5 @@
-import Chat from './_components/chat'
+import ChatArea from './_components/chat-area'
 
 export default function Home() {
-  return <Chat conversationId="" />
+  return <ChatArea conversationId="" />
 }

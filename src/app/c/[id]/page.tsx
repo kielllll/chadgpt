@@ -1,5 +1,5 @@
-import Chat from '@/app/_components/chat'
+import ChatArea from '@/app/_components/chat-area'
 
 export default function Conversation({ params }: { params: { id: string } }) {
-  return <Chat conversationId={params.id || ''} />
+  return <ChatArea conversationId={params.id || ''} />
 }

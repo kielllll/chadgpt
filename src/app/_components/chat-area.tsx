@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import Message from '@/components/message'
 import { Button } from '@/components/ui/button'
@@ -15,6 +14,7 @@ import { addConversation } from '@/server/conversation'
 import { useGetMessagesByConversationId } from '../_hooks/useGetMessagesByConversationId'
 import { addMessages } from '@/server/message'
 import { useQueryClient } from '@tanstack/react-query'
+import Messages from './messages'
 
 type Message = {
   id: string
@@ -25,7 +25,7 @@ type Message = {
   updatedAt: string
 }
 
-export default function Chat({
+export default function ChatArea({
   conversationId = '',
 }: {
   conversationId: string
@@ -130,7 +130,8 @@ export default function Chat({
 
     // redirect to conversation page if conversationId is empty
     if (conversationId === '') {
-      router.push(`/c/${baseConversationId}`)
+      // @ts-expect-error 'shallow' does not exist in type 'NavigateOptions'
+      router.push(`/c/${baseConversationId}`, { shallow: true })
       queryClient.invalidateQueries({
         queryKey: ['conversations', apiKey],
       })
@@ -152,34 +153,7 @@ export default function Chat({
 
   return (
     <section className="flex flex-col w-full gap-2 h-screen pb-4">
-      {messages.length > 0 ? (
-        <div className="flex flex-col gap-4 p-4 h-full overflow-y-auto">
-          {messages.map((message) => (
-            <Message
-              className={message.role === 'user' ? 'ml-auto' : ''}
-              key={message.id}
-              {...message}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col h-full items-center justify-center">
-          <div className="h-[250px] w-[250px] relative">
-            <Image
-              src={'/chad-no-messages.png'}
-              alt="Chad"
-              objectFit="cover"
-              fill
-            />
-          </div>
-          <p className="text-primary">
-            {apiKey
-              ? 'Start a conversation'
-              : 'Setup your API key in the settings'}
-            , King 👑
-          </p>
-        </div>
-      )}
+      <Messages messages={messages} apiKey={apiKey} />
       <Form {...form}>
         <form
           className="mt-auto flex mx-auto gap-2 w-1/2"
