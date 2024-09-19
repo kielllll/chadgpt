@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { BsLayoutSidebar } from 'react-icons/bs'
 import { BiMessageRoundedAdd } from 'react-icons/bi'
@@ -12,6 +13,21 @@ import { apiKeyAtom } from '@/lib/atoms'
 export default function SideBar() {
   const apiKey = useAtomValue(apiKeyAtom) || ''
   const { data: conversations } = useGetConversations(apiKey)
+  const [open, setOpen] = useState(true)
+
+  if (!open) {
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        className="bg-inherit hover:bg-gray-600 fixed left-1 top-4"
+        aria-label="Toggle Sidebar"
+        onClick={() => setOpen(!open)}
+      >
+        <BsLayoutSidebar size={24} />
+      </Button>
+    )
+  }
 
   return (
     <aside className="lg:w-3/12 xl:w-2/12 md:3/5 border-r-[1px] hidden sm:block max-h-screen overflow-y-auto">
@@ -23,6 +39,7 @@ export default function SideBar() {
             size="icon"
             className="bg-inherit hover:bg-gray-600"
             aria-label="Toggle Sidebar"
+            onClick={() => setOpen(!open)}
           >
             <BsLayoutSidebar size={24} />
           </Button>

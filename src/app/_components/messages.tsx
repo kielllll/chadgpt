@@ -39,14 +39,16 @@ function Messages(props: MessagesProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4 h-full overflow-y-auto">
-      {props.messages.map((message) => (
-        <Message
-          className={message.role === 'user' ? 'ml-auto' : ''}
-          key={message.id}
-          {...message}
-        />
-      ))}
+    <div className="h-full overflow-y-auto flex justify-center">
+      <div className="flex flex-col gap-4 p-4 lg:max-w-[70%] w-full">
+        {props.messages.map((message) => (
+          <Message
+            className={message.role === 'user' ? 'ml-auto' : ''}
+            key={message.id}
+            {...message}
+          />
+        ))}
+      </div>
     </div>
   )
 }
