@@ -1,6 +1,9 @@
+'use client'
+
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { LuUnplug } from 'react-icons/lu'
+import { useSetAtom } from 'jotai'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import {
   Dialog,
@@ -21,10 +24,25 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
+import { addApiKey } from '@/server/apikey'
+import { apiKeyAtom } from '@/lib/atoms'
 
-export default function ApiKeyDialog() {
+export default function ApiKeyDialog({ apiKey }: { apiKey: string }) {
   const [opened, setOpened] = useState(false)
-  const form = useForm()
+  const setApiKey = useSetAtom(apiKeyAtom)
+
+  const form = useForm<{
+    apiKey: string
+  }>()
+
+  const handleSubmit = async (formData: FormData) => {
+    const res = await addApiKey(formData.get('apiKey') as string)
+
+    if (res) {
+      setApiKey(res)
+      setOpened(false)
+    }
+  }
 
   return (
     <Dialog open={opened} onOpenChange={setOpened}>
@@ -51,7 +69,7 @@ export default function ApiKeyDialog() {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form className="flex flex-col">
+          <form className="flex flex-col" action={handleSubmit}>
             <FormField
               control={form.control}
               name="apiKey"
@@ -61,7 +79,9 @@ export default function ApiKeyDialog() {
                   <FormControl>
                     <Input
                       type="text"
+                      name="apiKey"
                       className="focus:!ring-0 focus:border-primary"
+                      defaultValue={apiKey}
                     />
                   </FormControl>
                   <FormDescription />

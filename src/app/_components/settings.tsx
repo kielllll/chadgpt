@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { GoGear } from 'react-icons/go'
+import { useAtomValue } from 'jotai'
 import {
   DropdownMenu,
   DropdownMenuLabel,
@@ -14,6 +15,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import ApiKeyDialog from './api-key-dialog'
 import ClearHistoryDialog from './clear-history-dialog'
+import { setModel as dbSetModel } from '@/server/apikey'
+import { apiKeyAtom } from '@/lib/atoms'
 
 const MODELS = [
   {
@@ -35,21 +38,35 @@ const MODELS = [
 ]
 
 export default function Settings() {
+  const apiKey = useAtomValue(apiKeyAtom)
   const [model, setModel] = useState('gpt-4o-mini')
+
+  const handleModelSelect = async (value: string) => {
+    const res = await dbSetModel(apiKey, value)
+
+    if (res) {
+      setModel(value)
+    }
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="bg-inherit hover:bg-slate-200 p-2 rounded-md"
+        className="bg-inherit hover:bg-gray-600 p-2 rounded-md"
         aria-label="Settings"
       >
         <GoGear size={24} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="text-lg">AI Models</DropdownMenuLabel>
-        <DropdownMenuRadioGroup value={model} onValueChange={setModel}>
+        <DropdownMenuRadioGroup value={model} onValueChange={handleModelSelect}>
           {MODELS.map(({ name, value }) => (
-            <DropdownMenuRadioItem key={value} value={value} aria-label={name}>
+            <DropdownMenuRadioItem
+              key={value}
+              value={value}
+              aria-label={name}
+              disabled={!apiKey}
+            >
               {name}
             </DropdownMenuRadioItem>
           ))}
@@ -59,8 +76,8 @@ export default function Settings() {
           General Settings
         </DropdownMenuLabel>
         <DropdownMenuGroup>
-          <ApiKeyDialog />
-          <ClearHistoryDialog />
+          <ApiKeyDialog apiKey={apiKey} />
+          <ClearHistoryDialog apiKey={apiKey} />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
